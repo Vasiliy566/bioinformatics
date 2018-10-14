@@ -1,0 +1,93 @@
+import java.util.Scanner;
+
+public class Hw1 {
+
+	static int matchScore(char a, char b, int match, int mismatch) {
+		if (a == b) {
+			return match;
+		} else {
+			return mismatch;
+		}
+
+	}
+
+	public static void main(String[] args) {
+		Scanner scan = new Scanner(System.in);
+		String s1 = scan.nextLine();
+		String s2 = scan.nextLine();
+
+		int match = 1;
+		int mismatch = -1;
+		int gap = -1;
+		int weight_matrix[][] = new int[s1.length() + 1][s2.length() + 1];
+
+		// filling border with (-1*i)
+		for (int i = 0; i < weight_matrix.length; i++) {
+			weight_matrix[i][0] = -1 * i;
+		}
+		for (int i = 0; i < weight_matrix[0].length; i++) {
+			weight_matrix[0][i] = -1 * i;
+		}
+		// fillint weights table
+		for (int i = 1; i < weight_matrix.length; i++) {
+			for (int j = 1; j < weight_matrix[0].length; j++) {
+				int rMatch = weight_matrix[i - 1][j - 1]
+						+ matchScore(s1.charAt(i - 1), s2.charAt(j - 1), match, mismatch);
+				weight_matrix[i][j] = Math.max(Math.max(weight_matrix[i][j - 1] + gap, weight_matrix[i - 1][j] + gap),
+						rMatch);
+			}
+		}
+		// find the way
+		String alignedSeq1 = "";
+		String alignedSeq2 = "";
+
+
+		int i = s1.length();
+		int j = s2.length();
+
+		while ((i > 0) && (j > 0)) {
+			int current = weight_matrix[i][j];
+			int diagonal = weight_matrix[i - 1][j - 1];
+			int up = weight_matrix[i - 1][j];
+			int left = weight_matrix[i][j - 1];
+			if (current == up + gap) {
+				alignedSeq2 += s2.charAt(i - 1);
+				alignedSeq1 += '-';
+				i--;
+
+			} else if (current == diagonal + matchScore(s1.charAt(j - 1), s2.charAt(i - 1), match, mismatch)) {
+				alignedSeq1 += s1.charAt(j - 1);
+				alignedSeq2 += s2.charAt(i - 1);
+				i--;
+				j--;
+
+			} else if (current == left + gap) {
+				alignedSeq1 += s1.charAt(j - 1);
+				alignedSeq2 += '-';
+				j--;
+
+			} 
+		}
+
+		while (i > 0) {
+			alignedSeq2 += s2.charAt(i - 1);
+			alignedSeq1 += '-';
+			i--;
+		}
+		while (j > 0) {
+			alignedSeq1 += s1.charAt(j - 1);
+			alignedSeq2 += '-';
+			j--;
+		}
+		/// out
+		System.out.println("first sequence : " + s1);
+		System.out.println("first sequence : " + s2);
+		System.out.println("Gap = " + gap);
+		System.out.println("Match = " + match);
+		System.out.println("Mismatch = " + mismatch);
+		System.out.println("-------------------------------");
+		System.out.println(alignedSeq1);
+		System.out.println(alignedSeq2);
+	}
+
+}
