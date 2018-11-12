@@ -1,6 +1,30 @@
-import java.util.Scanner;
-
-public class Hw1 {
+/**
+ * 
+ * @author Vasily Isaev
+ * @version 7.20
+ * @since 10.10.2018
+ */
+/*
+ * The Needleman–Wunsch algorithm is an algorithm used in bioinformatics to
+ * align protein or nucleotide sequences. It was one of the first applications
+ * of dynamic programming to compare biological sequences. The algorithm was
+ * developed by Saul B. Needleman and Christian D. Wunsch and published in 1970.
+ * The algorithm essentially divides a large problem (e.g. the full sequence)
+ * into a series of smaller problems and uses the solutions to the smaller
+ * problems to reconstruct a solution to the larger problem. It is also
+ * sometimes referred to as the optimal matching algorithm and the global
+ * alignment technique. The Needleman–Wunsch algorithm is still widely used for
+ * optimal global alignment, particularly when the quality of the global
+ * alignment is of the utmost importance.
+ * 
+ * input format
+ * sequence_1
+ * sequence_2
+ */
+public class Needleman_Wunsch {
+	static int match = 1;
+	static int mismatch = -1;
+	static int gap = -1;
 
 	static int matchScore(char a, char b, int match, int mismatch) {
 		if (a == b) {
@@ -11,16 +35,7 @@ public class Hw1 {
 
 	}
 
-	public static void main(String[] args) {
-		Scanner scan = new Scanner(System.in);
-		String s1 = scan.nextLine();
-		String s2 = scan.nextLine();
-
-		int match = 1;
-		int mismatch = -1;
-		int gap = -1;
-		int weight_matrix[][] = new int[s1.length() + 1][s2.length() + 1];
-
+	static void fillingMatrix(int[][] weight_matrix, String s1, String s2) {
 		// filling border with (-1*i)
 		for (int i = 0; i < weight_matrix.length; i++) {
 			weight_matrix[i][0] = -1 * i;
@@ -37,11 +52,9 @@ public class Hw1 {
 						rMatch);
 			}
 		}
-		// find the way
-		String alignedSeq1 = "";
-		String alignedSeq2 = "";
+	}
 
-
+	static void findTheWay(int[][] weight_matrix, String s1, String s2, String alignedSeq1, String alignedSeq2) {
 		int i = s1.length();
 		int j = s2.length();
 
@@ -66,10 +79,11 @@ public class Hw1 {
 				alignedSeq2 += '-';
 				j--;
 
-			} 
+			}
 		}
 
 		while (i > 0) {
+			
 			alignedSeq2 += s2.charAt(i - 1);
 			alignedSeq1 += '-';
 			i--;
@@ -79,6 +93,20 @@ public class Hw1 {
 			alignedSeq2 += '-';
 			j--;
 		}
+	}
+
+	public static void main(String[] args) {
+		String s1 = args[0];
+		String s2 = args[1];
+
+		int weight_matrix[][] = new int[s1.length() + 1][s2.length() + 1];
+
+		fillingMatrix(weight_matrix, s1, s2);
+
+		String alignedSeq1 = "";
+		String alignedSeq2 = "";
+		findTheWay(weight_matrix, s1, s2, alignedSeq1, alignedSeq1);
+
 		/// out
 		System.out.println("first sequence : " + s1);
 		System.out.println("first sequence : " + s2);
