@@ -7,7 +7,7 @@ import java.util.Scanner;
 import javax.imageio.ImageIO;
 
 public class main {
-
+	final String[] all_Colors = {"Black", "Red","Blue","Green","Yellow","Other"};
 	public static void main(String[] args) throws IOException {
 		Scanner scan = new Scanner(System.in);
 		String impImage = scan.nextLine();
@@ -24,25 +24,8 @@ public class main {
 				"Figures: " + PictureConfigInfo.figureDetector(PictureConfigInfo.imageToPixelArray(image)).size());
 		System.out.println();
 		for (int i = 0; i < 6; i++) {
-			if (i == 0) {
-				System.out.println("Black color:");
-			}
-			if (i == 1) {
-				System.out.println("Red color:");
-			}
-			if (i == 2) {
-				System.out.println("Blue color:");
-			}
-			if (i == 3) {
-				System.out.println("Green color:");
-			}
-			if (i == 4) {
-				System.out.println("Yellow color:");
-			}
-			if (i == 5) {
-				System.out.println("Other colors:");
-			}
-
+			
+			System.out.println(all_Colors[i] + " color:");
 			int circles = 0;
 			int lines = 0;
 			int arcs = 0;
